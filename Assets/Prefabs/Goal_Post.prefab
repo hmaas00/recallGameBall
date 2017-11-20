@@ -19,6 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4742685437533998}
+  - component: {fileID: 65340054924049056}
+  - component: {fileID: 114393576870445276}
   m_Layer: 0
   m_Name: Goal_Post
   m_TagString: Untagged
@@ -323,6 +325,31 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1705903808088976}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &65340054924049056
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1196511469098260}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 12.97, y: 13.19, z: 0.25}
+  m_Center: {x: 0, y: 9.13, z: 0}
+--- !u!114 &114393576870445276
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1196511469098260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f7af1ba7d35164fa7b2447ccc8e133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  control: {fileID: 0}
+  goals: 0
 --- !u!136 &136233629165444676
 CapsuleCollider:
   m_ObjectHideFlags: 1
