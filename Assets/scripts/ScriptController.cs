@@ -39,11 +39,28 @@ public class ScriptController : MonoBehaviour {
                 AddPoints();
             }
             //printEliminados();
-            if ( (eliminados.Count >= targets.Length && !gameOver) || player.GetComponent<ScriptFora>().getFora() )
+            //if ( (eliminados.Count >= targets.Length && !gameOver) || player.GetComponent<ScriptFora>().getFora() )
+            /*if ((eliminados.Count >= targets.Length) || player.GetComponent<ScriptFora>().getFora())
             {
                 //PrintEliminados();
                 gameOver = true;
                 Texto_Game_Over.text = "Game Over";
+                StartCoroutine(Example());
+                //Application.Quit();
+            }*/
+            if (player.GetComponent<ScriptFora>().getFora())
+            {
+                //PrintEliminados();
+                gameOver = true;
+                Texto_Game_Over.text = "Game Over";
+                StartCoroutine(Example());
+                //Application.Quit();
+            }
+            if (player.GetComponent<ScriptFora>().getFora())
+            {
+                //PrintEliminados();
+                gameOver = true;
+                Texto_Game_Over.text = "Parabéns, você fez " + pontos+ " pontos";
                 StartCoroutine(Example());
                 //Application.Quit();
             }
