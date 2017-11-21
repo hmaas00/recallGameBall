@@ -6,7 +6,7 @@ public class ScriptTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        StartCoroutine(Waiting());
+        StartCoroutine(Moving());
     }
 	
 	// Update is called once per frame
@@ -14,8 +14,18 @@ public class ScriptTest : MonoBehaviour {
         
            
 	}
-
-    IEnumerator Waiting()
+    void OnCollisionEnter(Collision col)
+    {
+        StartCoroutine(WaitDestroy());
+        //Destroy(this.gameObject);
+    }
+    IEnumerator WaitDestroy()
+    {
+        yield return new WaitForSeconds(3);
+        Destroy(this.gameObject);
+    }
+    //ir para direita e esquerda
+    IEnumerator Moving()
     {
         yield return new WaitForSeconds(1);
         GetComponent<Rigidbody>().AddForce(new Vector3(2f, 0f, 0f), ForceMode.VelocityChange);

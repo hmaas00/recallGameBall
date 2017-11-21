@@ -29,14 +29,21 @@ public class ScriptController : MonoBehaviour {
 	void Update () {
         for ( int i = 0; i < targets.Length; i++)
         {
-            //Debug.Log("var " + t.GetType().GetField("fora"));
+            //se esta fora e nao esta na lista de eliminados
             if (targets[i].GetComponent<ScriptFora>().getFora() == true && !eliminados.Contains(i))
             {
                 eliminados.Add(i);
+
+                //eliminados.removeat()
                 /*pontos += 100;
                 Texto_Points.text = ("Points: " + pontos);
                 StartCoroutine(blink());*/
                 AddPoints();
+            }
+            // esta dentro de volta depois de eliminado!
+            if ( !targets[i].GetComponent<ScriptFora>().getFora() && eliminados.Contains(i))
+            {
+                eliminados.Remove(i);
             }
             //printEliminados();
             //if ( (eliminados.Count >= targets.Length && !gameOver) || player.GetComponent<ScriptFora>().getFora() )
@@ -53,23 +60,24 @@ public class ScriptController : MonoBehaviour {
                 //PrintEliminados();
                 gameOver = true;
                 Texto_Game_Over.text = "Game Over";
-                StartCoroutine(Example());
+                StartCoroutine(EndGame());
                 //Application.Quit();
             }
-            if (player.GetComponent<ScriptFora>().getFora())
+            //se todos os objetos foram eliminados da area
+            if (eliminados.Count >= targets.Length)
             {
                 //PrintEliminados();
                 gameOver = true;
-                Texto_Game_Over.text = "Parabéns, você fez " + pontos+ " pontos";
-                StartCoroutine(Example());
+                Texto_Game_Over.text = "Parabéns, você fez " + pontos + " pontos";
+                StartCoroutine(EndGame());
                 //Application.Quit();
             }
         }
 
     }
-    IEnumerator Example()
+    IEnumerator EndGame()
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
         SceneManager.LoadScene("first_scene", LoadSceneMode.Single);  
     }
     IEnumerator blink()
