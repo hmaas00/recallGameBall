@@ -34,6 +34,20 @@ public class ScriptController : MonoBehaviour {
             {
                 eliminados.Add(i);
 
+                //controle de camera
+                if (targets[i].GetComponent<Transform>().position.y > 3 && targets[i].GetComponent<Transform>().position.z > 0)
+                {
+
+                    GameObject cam2 = GameObject.FindWithTag("camera2");
+                    GameObject cam_main = GameObject.FindWithTag("MainCamera");
+                    cam2.GetComponent<ScriptCamera2>().Target = targets[i];
+                    cam_main.GetComponent<Camera>().enabled = false;
+                    cam2.GetComponent<Camera>().enabled = true;
+                    StartCoroutine(mudaCam(cam_main,cam2));
+
+                }
+                
+
                 //eliminados.removeat()
                 /*pontos += 100;
                 Texto_Points.text = ("Points: " + pontos);
@@ -91,6 +105,14 @@ public class ScriptController : MonoBehaviour {
         }
         
     }
+
+    IEnumerator mudaCam(GameObject cam1, GameObject cam2)
+    {
+        yield return new WaitForSeconds(4f);
+        cam2.GetComponent<Camera>().enabled = false;
+        cam1.GetComponent<Camera>().enabled = true;
+    }
+
 
     public void AddPoints()
     {
