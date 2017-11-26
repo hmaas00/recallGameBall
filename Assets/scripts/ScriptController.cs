@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ScriptController : MonoBehaviour {
-    public GameObject [] targets;
+    private GameObject [] targets;
     public GameObject player;
     //public GameObject goal_post;
     public Text Texto_Game_Over;
@@ -21,6 +21,7 @@ public class ScriptController : MonoBehaviour {
         eliminados = new ArrayList();
         Texto_Game_Over.text = "";
         pontos = 0;
+        targets = GameObject.FindGameObjectsWithTag("shootable");
         //Rigidbody rb = targets.GetComponent<Rigidbody>();
         //Debug.Log("start : " + targets[0].transform.position.x + " " + targets[0].transform.position.y + " " + targets[0].transform.position.z);
     }
@@ -92,7 +93,7 @@ public class ScriptController : MonoBehaviour {
     IEnumerator EndGame()
     {
         yield return new WaitForSeconds(5);
-        SceneManager.LoadScene("first_scene", LoadSceneMode.Single);  
+        SceneManager.LoadScene("Scene_1", LoadSceneMode.Single);  
     }
     IEnumerator blink()
     {

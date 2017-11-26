@@ -20,4 +20,8 @@ public class ScriptGoal : MonoBehaviour {
         control.GetComponent<ScriptController>().AddPointsGoal();
         Debug.Log("GOAL");
     }
+    public void testMessage()
+    {
+        Debug.Log("text message tudo ok");
+    }
 }
