@@ -11,9 +11,10 @@ public class ScriptCamera : MonoBehaviour {
     public float offset_z;
 
     // Use this for initialization
-    void Start () {
-		
-	}
+    void Awake () {
+
+        TargetObject = GameObject.FindGameObjectWithTag("Player");
+    }
 	
 	// Update is called once per frame
 	void Update () {

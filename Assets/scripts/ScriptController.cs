@@ -6,28 +6,77 @@ using UnityEngine.UI;
 
 public class ScriptController : MonoBehaviour {
     private GameObject [] targets;
-    public GameObject player;
+    private GameObject player;
     //public GameObject goal_post;
-    public Text Texto_Game_Over;
-    public Text Texto_Points;
+    private Text Texto_Game_Over;
+    private Text Texto_Points;
 
     private ArrayList eliminados;
-    private int pontos;
+    //private int pontos;
+
+    public GameObject PointKeeper;
 
     private int countFora;
-    private bool gameOver = false;
+    private bool isGameOver = false; // bad ending
+    private bool isPassed = false; // good ending
+
+
+    /*
+      void Start()
+ {
+     SceneManager.sceneLoaded += OnSceneLoaded;
+ }
+ private void OnSceneLoaded(Scene aScene, LoadSceneMode aMode)
+ {
+     // do whatever you like
+ }
+         */
+
     // Use this for initialization
-    void Start () {
+    void Awake () {
+        //DontDestroyOnLoad(gameObject);
+        
+        //DontDestroyOnLoad( GameObject.FindGameObjectWithTag("Player") );
+        //DontDestroyOnLoad(GameObject.FindGameObjectWithTag("camera2"));
+        //SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+        //SceneManager.activeSceneChanged += SceneManager_activeSceneChanged;
         eliminados = new ArrayList();
+        // vincular gui
+        Texto_Game_Over = GameObject.Find("Text_Game_Over").GetComponent<Text>();
+        Texto_Points = GameObject.Find("Text_Points").GetComponent<Text>();
+        player = GameObject.FindGameObjectWithTag("Player");
         Texto_Game_Over.text = "";
-        pontos = 0;
+        PointKeeper = GameObject.Find("ScoreKeeper");
+        DontDestroyOnLoad(PointKeeper);
+        Texto_Points.text = ("Points: " + PointKeeper.GetComponent<ScriptScoreKeeper>().getPoints());
+        //pontos = 0;
         targets = GameObject.FindGameObjectsWithTag("shootable");
+        //GameObject.FindGameObjectWithTag("camera2").GetComponent<ScriptCamera2>().Target = GameObject.FindGameObjectWithTag("Player");
         //Rigidbody rb = targets.GetComponent<Rigidbody>();
         //Debug.Log("start : " + targets[0].transform.position.x + " " + targets[0].transform.position.y + " " + targets[0].transform.position.z);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+   /* private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        //Debug.Log("esta cena foi carregada: " + SceneManager.GetActiveScene().name);
+        //Texto_Game_Over = (Text)GameObject.Find("Text_Game_Over");
+        //Texto_Points = (Text)GameObject.Find("Text_Points");
+
+    }*/
+    /*
+    private void SceneManager_activeSceneChanged(Scene arg0, Scene arg1)
+    {
+        targets = GameObject.FindGameObjectsWithTag("shootable");
+        GameObject.FindGameObjectWithTag("camera2").GetComponent<ScriptCamera2>().Target = GameObject.FindGameObjectWithTag("Player");
+    }*/
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Debug.Log("começou a cena!!!");
+    }
+
+    // Update is called once per frame
+    void Update () {
         for ( int i = 0; i < targets.Length; i++)
         {
             //se esta fora e nao esta na lista de eliminados
@@ -41,13 +90,13 @@ public class ScriptController : MonoBehaviour {
 
                     GameObject cam2 = GameObject.FindWithTag("camera2");
                     GameObject cam_main = GameObject.FindWithTag("MainCamera");
-                    cam2.GetComponent<ScriptCamera2>().Target = targets[i];
+                    cam2.GetComponent<ScriptCamera2>().SetTarget(targets[i]);
                     cam_main.GetComponent<Camera>().enabled = false;
                     cam2.GetComponent<Camera>().enabled = true;
                     StartCoroutine(mudaCam(cam_main,cam2));
 
                 }
-                
+
 
                 //eliminados.removeat()
                 /*pontos += 100;
@@ -73,27 +122,54 @@ public class ScriptController : MonoBehaviour {
             if (player.GetComponent<ScriptFora>().getFora())
             {
                 //PrintEliminados();
-                gameOver = true;
+                
                 Texto_Game_Over.text = "Game Over";
-                StartCoroutine(EndGame());
+                StartCoroutine(BadEnding());
+                isGameOver = true;
                 //Application.Quit();
             }
             //se todos os objetos foram eliminados da area
             if (eliminados.Count >= targets.Length)
             {
                 //PrintEliminados();
-                gameOver = true;
-                Texto_Game_Over.text = "Parabéns, você fez " + pontos + " pontos";
-                StartCoroutine(EndGame());
+
+                //Texto_Game_Over.text = "Parabéns, você fez " + pontos + " pontos";
+                Texto_Game_Over.text = "Parabéns, você fez " + PointKeeper.GetComponent<ScriptScoreKeeper>().getPoints() + " pontos";
+                
+
+                StartCoroutine(GoodEnding());
+                isPassed = true;
                 //Application.Quit();
             }
         }
 
     }
-    IEnumerator EndGame()
+    IEnumerator BadEnding()
     {
+        //so toca se jogo nao tiver terminado e nao tiver sido passado
+        if (!isGameOver && !isPassed) // bad ending
+        {
+            isGameOver = true;
+            GetComponent<AudioSource>().Play(); // sound end game
+        }
         yield return new WaitForSeconds(5);
-        SceneManager.LoadScene("Scene_1", LoadSceneMode.Single);  
+    }
+    IEnumerator GoodEnding()
+    {
+        Debug.Log("active scene: " + SceneManager.GetActiveScene().name);
+        //name of the scene
+        //Scene_xx
+        //01234567
+
+        string s = SceneManager.GetActiveScene().name;
+        // change s to represent next scene
+        string s_num = s.Substring(6); // get num part
+        s = s.Substring(0, 6); // change s to Scene_ form
+        int x = int.Parse(s_num) + 1; // add 1
+        s_num = x.ToString();// change back to string
+        s = (s + s_num); // concat new scene's name
+        yield return new WaitForSeconds(5);
+        SceneManager.LoadScene(s, LoadSceneMode.Single); // load next scene!
     }
     IEnumerator blink()
     {
@@ -117,14 +193,18 @@ public class ScriptController : MonoBehaviour {
 
     public void AddPoints()
     {
-        pontos += 100;
-        Texto_Points.text = ("Points: " + pontos);
+
+        //pontos += 100;
+        PointKeeper.GetComponent<ScriptScoreKeeper>().AddPoints(100);
+        //Texto_Points.text = ("Points: " + pontos);
+        Texto_Points.text = ("Points: " + PointKeeper.GetComponent<ScriptScoreKeeper>().getPoints());
         StartCoroutine(blink());
     }
     public void AddPointsGoal()
     {
-        pontos += 1000;
-        Texto_Points.text = ("Points: " + pontos);
+        //pontos += 1000;
+        PointKeeper.GetComponent<ScriptScoreKeeper>().AddPoints(1000);
+        Texto_Points.text = ("Points: " + PointKeeper.GetComponent<ScriptScoreKeeper>().getPoints());
         StartCoroutine(blink());
     }
 
@@ -132,14 +212,8 @@ public class ScriptController : MonoBehaviour {
     {
         foreach ( int e in eliminados)
         {
-            //Debug.Log("eliminado: " + e);
+            Debug.Log("eliminado: " + e);
             Debug.Log("Game Over");
         }
     }
-                            /*void Start()
-                        {
-                        StartCoroutine(Example());
-                        }
-
-                        */
 }

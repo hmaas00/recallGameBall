@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class ScriptFora : MonoBehaviour {
 
-    public bool fora;
+    private bool fora;
     //public bool morto;
 	// Use this for initialization
-	void Start () {
+	void Awake () {
         fora = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (this.transform.position.x > 11 || this.transform.position.x < -11 || this.transform.position.z > 11 || this.transform.position.z < -12)
+        if (transform.position.x > 11 || transform.position.x < -11 || transform.position.z > 11 || transform.position.z < -12)
         {
             fora = true;
             //Debug.Log("start : " + this.transform.position.x + " " + this.transform.position.y + " " + this.transform.position.z);

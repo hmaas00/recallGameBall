@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ScriptGoal : MonoBehaviour {
-    public GameObject control;
+    
+    //public GameObject control;
     public int goals;
 	// Use this for initialization
 	void Start () {
@@ -17,8 +18,17 @@ public class ScriptGoal : MonoBehaviour {
     void OnTriggerEnter(Collider other)
     {
         goals++;
-        control.GetComponent<ScriptController>().AddPointsGoal();
-        Debug.Log("GOAL");
+        //se colisão for com keeper, nao pontuar!
+        if (!other.gameObject.name.Equals("Keeper"))
+        {
+            //Debug.Log("KEEPER HIT!!!!!!! =" + other.gameObject.name);
+            GetComponent<AudioSource>().Play(); // sound for goal
+            GameObject control = GameObject.FindGameObjectWithTag("GameController");
+            control.GetComponent<ScriptController>().AddPointsGoal();
+            
+        }
+        
+        //Debug.Log("GOAL");
     }
     public void testMessage()
     {

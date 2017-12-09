@@ -17,6 +17,10 @@ public class ScriptTest : MonoBehaviour {
     void OnCollisionEnter(Collision col)
     {
         StartCoroutine(WaitDestroy());
+        if (col.gameObject.tag == "shootable")
+        {
+            GetComponent<AudioSource>().Play();
+        }
         //Destroy(this.gameObject);
     }
     IEnumerator WaitDestroy()
@@ -43,4 +47,5 @@ public class ScriptTest : MonoBehaviour {
         }
 
     }
+
 }

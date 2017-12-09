@@ -6,17 +6,13 @@ public class ScriptPlayer: MonoBehaviour {
 
     // Use this for initialization
 
-    public Rigidbody rb;
+    private Rigidbody rb;
     public float speed;
 	void Start () {
         rb = GetComponent<Rigidbody>();
     }
-    /* public Rigidbody rb;
+    // public Rigidbody rb;
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-    }*/
 
     // Update is called once per frame
     void FixedUpdate () {
@@ -31,5 +27,10 @@ public class ScriptPlayer: MonoBehaviour {
         rotation *= Time.deltaTime;
         transform.Translate(0, 0, translation);
         transform.Rotate(0, rotation, 0);*/
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "shootable")
+            GetComponent<AudioSource>().Play();
     }
 }
